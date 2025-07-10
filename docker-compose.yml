@@ -1,58 +1,54 @@
 version: '3.8'
+
 services:
-  Winfrey-client:
-    image: brianbwire/brian-yolo-client:v1.0.0
-    build: ./client
-    container_name: brian-yolo-client
-    stdin_open: true
-    tty: true
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - Muiruri-net
+
+  backend:
+    container_name: Winfrey-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/mydb
+    depends_on:
+      - mongo
+    networks:
+      - Muiruri-net
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    command: npm start 
+
+  client:
+    container_name: Winfrey-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     depends_on: 
-      - brian-yolo-backend
+      - backend
     networks:
-      - app-net
-
-  #Builds the backend Docker image and creates the backend microservice
-  brian-yolo-backend:
-    image: brianbwire/brian-yolo-backend:v1.0.0
-    build: ./backend
-    container_name: brian-yolo-backend
-    stdin_open: true
-    tty: true
-    restart: always
-    ports:
-      - "5000:5000"
-    depends_on: 
-      - app-ip-mongo
-    networks:
-      - app-net
-
-  #Creates the database microservice
-  app-ip-mongo:
-    image: mongo
-    container_name: app-mongo
-    ports:
-      - "27017:27017"
-    networks:
-      - app-net
+      - Muiruri-net
     volumes:
-      - type: volume
-        source: app-mongo-data
-        target: /data/db
+      - ./client:/app 
+    working_dir: /app
+    command: npm start
 
-#Creates the network infrastructure necessary for the containers to communicate with each other
 networks:
-  app-net:
-    name: app-net
+  Muiruri-net:
     driver: bridge
-    attachable: true
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16 
-          ip_range: 172.20.0.0/16 
 
-#Creates a Docker volume that persists all the data stored in the database
 volumes:
-  app-mongo-data:
-    driver: local
+  mongo-data:
