@@ -1,18 +1,21 @@
-FROM node:20-alpine 
 
-WORKDIR /app
+FROM node:20-alpine AS build
+
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install --omit=dev
+RUN npm install
 
-FROM node:20-alpine
+COPY . .
+
+FROM alpine:3.16.7
 
 WORKDIR /app
 
-RUN npm install --omit=dev
+RUN apk update && apk add nodejs npm
 
-COPY . .
+COPY --from=build /usr/src/app /app
 
 EXPOSE 3000
 

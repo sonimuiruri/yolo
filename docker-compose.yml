@@ -20,15 +20,13 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - MONGO_URL=mongodb://mongo:27017/mydb
+      - MONGODB_URI=mongodb://mongo:27017/mydb
     depends_on:
       - mongo
     networks:
       - Muiruri-net
-    volumes:
-      - ./backend:/app
     working_dir: /app
-    command: npm start 
+    command: npm start
 
   client:
     container_name: Winfrey-client
@@ -45,6 +43,8 @@ services:
       - ./client:/app 
     working_dir: /app
     command: npm start
+    stdin_open: true
+    tty: true
 
 networks:
   Muiruri-net:
@@ -52,3 +52,4 @@ networks:
 
 volumes:
   mongo-data:
+
