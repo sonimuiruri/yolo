@@ -7,22 +7,23 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    image: winfrey-backend-ip
     ports:
       - "5000:5000"
-    environment:
-      - MONGODB_URI=mongodb://mongo:27017/mydb
-    depends_on:
-      - mongo
+    env_file: 
+      - ./backend/.env
     networks:
       - Muiruri-net
-    working_dir: /app
-    command: npm start
+    volumes:
+      - ./backend:/app/
+      - backend_node_modules:/app/node_modules
 
   client:
     container_name: Winfrey-client
     build:
       context: ./client
       dockerfile: Dockerfile
+    image: winfrey-client-ip
     ports:
       - "3000:3000"
     depends_on: 
@@ -30,16 +31,13 @@ services:
     networks:
       - Muiruri-net
     volumes:
-      - ./client:/app 
-    working_dir: /app
-    command: npm start
-    stdin_open: true
-    tty: true
+      - ./client:/app
+      - client_node_modules:/app/node_modules
 
 networks:
   Muiruri-net:
     driver: bridge
 
 volumes:
-  mongo-data:
-
+  backend_node_modules:
+  client_node_modules:
