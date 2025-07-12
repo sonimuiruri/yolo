@@ -14,9 +14,7 @@ services:
       - ./backend/.env
     networks:
       - Muiruri-net
-    volumes:
-      - ./backend:/app/
-      - backend_node_modules:/app/node_modules
+  
 
   client:
     container_name: Winfrey-client
@@ -30,14 +28,9 @@ services:
       - backend
     networks:
       - Muiruri-net
-    volumes:
-      - ./client:/app
-      - client_node_modules:/app/node_modules
 
 networks:
   Muiruri-net:
     driver: bridge
 
-volumes:
-  backend_node_modules:
-  client_node_modules:
+
