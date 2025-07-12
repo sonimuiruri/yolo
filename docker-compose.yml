@@ -23,7 +23,7 @@ services:
       dockerfile: Dockerfile
     image: winfrey-client-ip
     ports:
-      - "3000:3000"
+     - "3000:80" 
     depends_on: 
       - backend
     networks:
