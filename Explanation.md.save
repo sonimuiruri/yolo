@@ -1,5 +1,0 @@
-MY SECOND IP PROJECT
-
-## 1. Base Image Choice
-For both the backend and frontend, I used `node:13.12.0-alpine` as the base image.
-
