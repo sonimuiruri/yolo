@@ -1,0 +1,7 @@
+---
+app_repo: "https://github.com/sonimuiruri/yolo.git"
+app_dir: "/home/vagrant/yolo"
+mongo_image: "mongo:4.4"
+backend_image: "winfr3y/backend:latest"
+frontend_image: "winfr3y/frontend:latest"
+
