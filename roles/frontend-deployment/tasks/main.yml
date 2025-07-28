@@ -1,0 +1,14 @@
+- name: Pull frontend image from Docker Hub
+  community.docker.docker_image:
+    name: winfr3y/frontend:latest
+    source: pull
+
+- name: Create frontend container on custom network
+  community.docker.docker_container:
+    name: yolo-frontend
+    image: winfr3y/frontend:latest
+    networks:
+      - name: "Muiruri-net"
+    ports:
+      - "3000:3000"
+  become: yes

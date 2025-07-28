@@ -1,4 +1,9 @@
----
+# Create the Docker network
+- name: Create custom Docker network
+  community.docker.docker_network:
+    name: "Muiruri-net"
+    driver: bridge
+
 # Run MongoDB container using the image defined in the variable
 - name: Run MongoDB container
   community.docker.docker_container:
@@ -8,4 +13,8 @@
     restart_policy: always
     ports:
       - "27017:27017"
+    networks:
+      - name: "Muiruri-net"
+    volumes:
+      - mongodb_data:/data/db
 
