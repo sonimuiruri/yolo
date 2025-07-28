@@ -13,6 +13,10 @@ Vagrant.configure("2") do |config|
   # Set the hostname of the virtual machine
   config.vm.hostname = "winfrey-ip-3"
 
+  # Configure the network to use a private network with a static IP
+  # This allows the VM to be accessed via a specific IP address
+  config.vm.network "private_network", ip: "192.168.56.50"
+
   # Share current folder to VM (optional)
   config.vm.synced_folder ".", "/home/vagrant/winfrey-ip-3"
 
