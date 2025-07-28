@@ -1,0 +1,39 @@
+---
+# Clone the application code from GitHub
+- name: Clone e-commerce app from GitHub
+  git:
+    repo: "{{ app_repo }}"         # using the variable for repo URL
+    dest: "{{ app_dir }}"          # using the variable for destination
+
+# Run the frontend container
+- name: Run frontend container
+  community.docker.docker_container:
+    name: frontend
+    image: "{{ frontend_image }}"  # using variable for frontend image
+    state: started
+    restart_policy: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - "{{ app_dir }}/frontend:/app"
+    working_dir: /app
+    command: npm start
+    env:
+      MONGO_URL: mongodb://host.docker.internal:27017/yolo
+
+# Run the backend container
+- name: Run backend container
+  community.docker.docker_container:
+    name: backend
+    image: "{{ backend_image }}"   # using variable for backend image
+    state: started
+    restart_policy: always
+    ports:
+      - "5000:5000"
+    volumes:
+      - "{{ app_dir }}/backend:/app"
+    working_dir: /app
+    command: npm start
+    env:
+      MONGO_URL: mongodb://host.docker.internal:27017/yolo
+

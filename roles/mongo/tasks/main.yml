@@ -1,0 +1,11 @@
+---
+# Run MongoDB container using the image defined in the variable
+- name: Run MongoDB container
+  community.docker.docker_container:
+    name: mongo
+    image: "{{ mongo_image }}"
+    state: started
+    restart_policy: always
+    ports:
+      - "27017:27017"
+
