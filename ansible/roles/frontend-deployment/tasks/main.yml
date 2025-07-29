@@ -1,0 +1,12 @@
+---
+- name: Deploy frontend container
+  community.docker.docker_container:
+    name: yolo-frontend
+    image: winfr3y/frontend:latest
+    state: started
+    restart_policy: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - name: app-net
+

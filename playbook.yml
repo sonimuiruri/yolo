@@ -1,22 +1,28 @@
 ---
 - name: Ansible playbook to automate deployment of the Yolo e-commerce app
-  hosts: all
+  hosts: localhost
+  connection: local
   become: true
 
   vars_files:
-    - vars/vars.yml    # Load variables from vars file
+    - vars/vars.yml
+
+  pre_tasks:
+    - name: Ensure Docker network exists
+      community.docker.docker_network:
+        name: app-net
+        state: present
 
   roles:
-    - role: docker                  # Installs Docker and Docker Compose
+    - role: docker
       tags: docker
 
-    - role: setup-mongodb            # Sets up MongoDB container
+    - role: setup-mongodb
       tags: mongo
 
-    - role: frontend-deployment     # Clones app and runs frontend container
+    - role: frontend-deployment
       tags: frontend
 
-    - role: backend-deployment      # Clones app and runs backend container
+    - role: backend-deployment
       tags: backend
 
-    

@@ -13,13 +13,17 @@ FROM node:16-alpine
 
 WORKDIR /app
 
-# Copy node_modules and app files separately to ensure permissions
-COPY --from=builder /app/node_modules /app/node_modules
+# Copy the app and dependencies from builder
 COPY --from=builder /app /app
 
-# Use non-root user
+# Set ownership to node user
+RUN chown -R node:node /app
+
+# Switch to non-root user
 USER node
 
 EXPOSE 5000
 
+# Run using npm (available in this image)
 CMD ["npm", "start"]
+

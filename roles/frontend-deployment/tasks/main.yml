@@ -10,5 +10,6 @@
     networks:
       - name: "Muiruri-net"
     ports:
-      - "3000:3000"
+      - "3001:3000"   # changed host port from 3000 to 3001
   become: yes
+

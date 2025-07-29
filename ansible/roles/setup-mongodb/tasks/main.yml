@@ -1,0 +1,19 @@
+---
+- name: Create MongoDB volume
+  community.docker.docker_volume:
+    name: mongo-data
+    state: present
+
+- name: Create MongoDB container
+  community.docker.docker_container:
+    name: app-mongo
+    image: mongo:5.0
+    state: started
+    restart_policy: unless-stopped
+    ports:
+      - "27017:27017"
+    networks:
+      - name: app-net
+    volumes:
+      - mongo-data:/data/db
+

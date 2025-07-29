@@ -1,0 +1,11 @@
+---
+- name: Ansible playbook to automate deployment of the Yolo e-commerce app
+  hosts: all
+  become: true
+
+  roles:
+    - docker             # installs docker
+    - create-network     # creates Muiruri-net
+    - setup-mongodb
+    - backend-deployment
+    - frontend-deployment

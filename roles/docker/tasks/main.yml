@@ -1,4 +1,6 @@
 ---
+# roles/docker/tasks/main.yml
+
 - name: Install apt packages
   apt:
     name:
@@ -18,12 +20,23 @@
   apt_repository:
     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
     state: present
+    filename: docker
 
 - name: Install Docker
   apt:
     name: docker-ce
     state: present
+    update_cache: yes
 
-- name: Install Docker Python module
-  pip:
+- name: Install Docker Python SDK via apt
+  apt:
+    name: python3-docker
+    state: present
+    update_cache: yes
+
+- name: Ensure Docker service is started and enabled
+  systemd:
     name: docker
+    enabled: yes
+    state: started
+

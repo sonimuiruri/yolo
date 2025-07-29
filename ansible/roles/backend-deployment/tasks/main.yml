@@ -1,0 +1,14 @@
+---
+- name: Deploy backend container
+  community.docker.docker_container:
+    name: yolo-backend
+    image: winfr3y/backend:latest
+    state: started
+    restart_policy: unless-stopped
+    ports:
+      - "5000:5000"
+    env:
+      MONGODB_URI: mongodb://app-mongo:27017/yolo
+    networks:
+      - name: app-net
+

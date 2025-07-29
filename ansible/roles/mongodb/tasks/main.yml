@@ -1,0 +1,12 @@
+- name: Run MongoDB container
+  community.docker.docker_container:
+    name: mongo
+    image: "{{ mongo_image }}"
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ mongo_port }}"
+    networks:
+      - name: "{{ docker_network }}"
+    volumes:
+      - mongodb_data:/data/db

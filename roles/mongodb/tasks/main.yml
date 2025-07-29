@@ -1,0 +1,22 @@
+- name: Create MongoDB named volume
+  community.docker.docker_volume:
+    name: mongodb_data
+
+- name: Create custom Docker network
+  community.docker.docker_network:
+    name: "Muiruri-net"
+    driver: bridge
+
+- name: Run MongoDB container
+  community.docker.docker_container:
+    name: mongo
+    image: "{{ mongo_image }}"
+    state: started
+    restart_policy: always
+    ports:
+      - "27017:27017"
+    networks:
+      - name: "Muiruri-net"
+    volumes:
+      - mongodb_data:/data/db
+
