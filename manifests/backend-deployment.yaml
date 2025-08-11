@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: ecommerce
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecommerce
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: ecommerce
+        tier: backend
+    spec:
+      containers:
+        - name: backend
+          image: docker.io/winfr3y/winfrey-backend-ip:v1
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGO_URL
+              value: "mongodb://mongodb:27017/ecommerce"
