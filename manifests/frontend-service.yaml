@@ -1,20 +1,12 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
-  name: frontend-deployment
+  name: winfrey-client-ip
 spec:
-  replicas: 2
   selector:
-    matchLabels:
-      app: frontend
-  template:
-    metadata:
-      labels:
-        app: frontend
-    spec:
-      containers:
-        - name: frontend
-          image: winfr3y/winfrey-client-ip:v1
-          ports:
-            - containerPort: 3000
+    app: winfrey-client
+  ports:
+    - port: 80
+      targetPort: 80
+  type: LoadBalancer
 
