@@ -23,5 +23,5 @@ spec:
           ports:
             - containerPort: 5000
           env:
-            - name: MONGO_URL
+            - name: MONGODB_URI
               value: "mongodb://mongodb:27017/ecommerce"
