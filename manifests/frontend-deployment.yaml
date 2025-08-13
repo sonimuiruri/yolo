@@ -14,6 +14,10 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: winfr3y/winfrey-client-ip
+          image: winfr3y/winfrey-client-ip:v2
           ports:
             - containerPort: 80
+          env:
+            - name: REACT_APP_API_URL
+              value: "http://backend-service:5000"
+

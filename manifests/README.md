@@ -32,8 +32,8 @@ docker build -t winfr3y/winfrey-backend-ip:v1 backend/
 docker push winfr3y/winfrey-backend-ip:v1
 
 # Frontend
-docker build -t winfr3y/winfrey-client-ip:v1 frontend/
-docker push winfr3y/winfrey-client-ip:v1
+docker build -t winfr3y/winfrey-client-ip:v2 frontend/
+docker push winfr3y/winfrey-client-ip:v2
 
 ```
 
@@ -59,17 +59,16 @@ Find the EXTERNAL-IP for the frontend service:
 
 ```bash
 
-kubectl get svc frontend
+kubectl get svc frontend-service
 ```
 
 My output :
 
-  
-NAME                TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
-winfrey-client-ip   LoadBalancer   10.245.125.45   129.212.198.61   80:31775/TCP   23s
+  NAME               TYPE           CLUSTER-IP       EXTERNAL-IP       PORT(S)        AGE
+frontend-service   LoadBalancer   10.245.197.252   138.197.224.177   80:32268/TCP   16s
 
 
-[http://129.212.198.61](http://129.212.198.61)<<<<<<OPEN to access my public url
+[http://138.197.224.177]<<<<<<OPEN to access my public url
 
 
 

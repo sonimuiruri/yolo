@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: docker.io/winfr3y/winfrey-backend-ip:v1
+          image: winfr3y/winfrey-backend-ip:v1
           ports:
             - containerPort: 5000
           env:

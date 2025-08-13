@@ -1,15 +1,12 @@
 #  Winfrey-explanation.md
 
  1. Build and tag your Docker images, then push them to Dockerhub
-   -i had initially built and pushed my Docker images to Dockerhub in ip 2 but i still re-did it just to be sure
+   - I had initially built and pushed my Docker images to Docker Hub in IP 2, but I re-did it to ensure they were up to date for Kubernetes.
 
 3. Create a DigitalOcean Kubernetes cluster (DOKS):
+  - Used DigitalOcean as my cloud platform
 
-   ```bash
-   doctl kubernetes cluster create <> --region <REGION> --node-pool "name=pool1;size=s-2vcpu-4gb;count=3"
-   ```
-
-4. Make a `manifests/` folder and add these YAML files:
+4. Made a `manifests/` folder and add these YAML files:
 
    * `frontend-deployment.yaml`
    * `backend-deployment.yaml`
@@ -17,29 +14,51 @@
    * `frontend-loadbalancer.yaml`
    * `backend-clusterip.yaml`
    * `mongodb-headless.yaml`
-   * `pv-claim.yaml` (if using a static PV) or rely on `StorageClass` in the StatefulSet.
+   
 
-5. Use **Deployments** for frontend and backend:
+5. MongoDB with StatefulSet
 
-   * Set `replicas` and resource limits.
-   * Use clear labels and selectors.
-   * Reference your pushed Docker Hub images.
+- **StatefulSet** ensures stable network identities for MongoDB pods.
+- **Headless Service** configured with `ClusterIP: None` for DNS-based pod access.
+- **Persistent Storage** via `volumeClaimTemplates`.
+- **Storage Class**: `do-block-storage` (DigitalOcean’s default block storage).
+- **PVC** was successfully bound, confirming persistence setup:
 
-6. Use a **StatefulSet** for MongoDB:
+```bash
+kubectl get pvc
+mongo-persistent-storage-mongodb-0   Bound   1Gi   RWO   do-block-storage
+```
 
-   * Add a headless Service (`ClusterIP: None`).
-   * Include `volumeClaimTemplates` for persistent storage.
 
-7. Persistent storage on DigitalOcean:
+6. Service Exposure
 
-   * Use DigitalOcean Block Storage with the default `StorageClass` (`do-block-storage`).
-   * Ensure PVCs are bound so data survives restarts.
+- **Frontend Service** → `LoadBalancer`  
+  - **External IP**: `138.197.224.177`  
+  - **Port**: `80` (public access to web app)  
 
-8. Expose services:
+- **Backend Service** → `ClusterIP`  
+  - Internal only  
+  - **Port**: `5000`  
 
-   * Frontend → `LoadBalancer` for public access.
-   * Backend → `ClusterIP` for internal use.
-   * MongoDB → headless Service for pod discovery.
+- **MongoDB Service** → `Headless`  
+  - Internal DNS resolution for StatefulSet pods  
+  - No external exposure  
+
+
+7. Service exposure:
+
+   * Frontend Service → LoadBalancer
+
+               External IP: 138.197.224.177
+               Port: 80
+
+   * Backend Service → ClusterIP
+
+               Internal only, port 5000
+
+   * MongoDB Service → Headless, for internal DNS resolution by StatefulSet
+
+
 
 9. Apply manifests in order:
 
@@ -53,7 +72,7 @@
    kubectl apply -f frontend-loadbalancer.yaml
    ```
 
-10. Check resources:
+10. Verification:
 
     ```bash
     kubectl get pods,svc,sts,pvc
@@ -68,22 +87,25 @@
     * Delete the MongoDB pod.
     * After restart, confirm the data is still there.
 
-12. Git workflow:
+12. GitHub & Documentation
+   - All manifests and Dockerfiles committed to GitHub.
 
-    * Use branches for changes.
-    * Commit often with clear messages.
-    * Keep a clean structure with `README.md` and `explanation.md`.
+   - README.md includes:
 
-13. Naming & tagging:
+       * Deployment steps
 
-    * Use versioned tags (e.g., `v1`, `v1.1`).
-    * Avoid `latest`.
+       * Manifest list
 
-14. README should have:
+       * Docker Hub image names
 
-    * Deployment steps.
-    * Manifest list.
-    * Docker Hub image names.
-    * Live app URL (`http://<EXTERNAL-IP>:<PORT>`).
+       * Live app URL: http://138.197.224.177
 
-15. Push to GitHub with manifests, Dockerfiles, README, and this explanation.
+   - explanation.md (this file) documents:
+
+        * Deployment logic
+
+        * Storage setup
+
+        *  Service exposure strategy
+
+        * Testing steps
